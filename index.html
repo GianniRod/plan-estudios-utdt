@@ -3,73 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clasificación de Materias - Economía Empresarial</title>
+    <title>Clasificación de Materias - Economía Empresarial UTDT</title>
     <!-- Carga de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Fuente Inter para mejor legibilidad */
         body { font-family: 'Inter', sans-serif; }
-        /* Estilos personalizados para la dificultad */
-        .DIFÍCIL { background-color: #ef4444; color: white; } /* red-500 */
-        .MEDIO { background-color: #f59e0b; color: black; } /* amber-500 */
-        .FÁCIL { background-color: #10b981; color: white; } /* emerald-500 */
+        /* Paleta UTDT Inferred: Azul Oscuro/Índigo como color institucional */
+        .utdt-blue-dark { background-color: #312e81; color: white; } /* Indigo-800 */
+        .utdt-blue-text { color: #312e81; } /* Indigo-800 */
+        .utdt-border { border-color: #312e81; } /* Indigo-800 */
+
+        /* Estilos de pastillas de Dificultad (Ajustados para más sobriedad) */
+        .DIFÍCIL { background-color: #fca5a5; color: #b91c1c; } /* Red-300 / Red-700 */
+        .MEDIO { background-color: #fcd34d; color: #b45309; } /* Amber-300 / Amber-800 */
+        .FÁCIL { background-color: #a7f3d0; color: #065f46; } /* Emerald-300 / Emerald-800 */
+
         .difficulty-pill {
             padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-weight: 600;
+            border-radius: 4px; /* Menos redondeado para un look más formal */
+            font-weight: 700;
             font-size: 0.875rem;
             display: inline-block;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen p-4 sm:p-8">
+<body class="bg-gray-100 min-h-screen p-4 sm:p-10">
 
-    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-6 sm:p-8">
-        <header class="mb-8 border-b pb-4">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-2">
-                Plan de Estudios: Economía Empresarial (4 Años)
+    <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-lg overflow-hidden">
+        <header class="p-6 sm:p-8 border-b-4 utdt-border bg-white">
+            <h1 class="text-3xl sm:text-4xl font-extrabold utdt-blue-text mb-2">
+                Plan de Estudios: Economía Empresarial
             </h1>
-            <p class="text-gray-500 text-lg">Clasificación de dificultad de las materias.</p>
+            <p class="text-gray-600 text-lg border-l-4 border-amber-400 pl-3">
+                Clasificación de dificultad de las materias.
+            </p>
         </header>
 
-        <!-- Filtros y Opciones de Vista -->
-        <div class="mb-8 space-y-4">
-            <h2 class="text-xl font-bold text-gray-700">Filtros de Visualización</h2>
+        <!-- Controles de Filtro y Visualización -->
+        <div class="p-6 sm:p-8 space-y-6">
+            <h2 class="text-xl font-bold text-gray-700 uppercase tracking-wider">Visualización y Filtros</h2>
 
             <!-- Selector de Vista (Por Año vs Por Dificultad) -->
             <div id="view-selector" class="flex flex-col sm:flex-row gap-3">
-                <button data-view="year" class="view-btn px-4 py-2 font-semibold rounded-lg transition duration-150 ease-in-out bg-indigo-600 text-white shadow-md hover:bg-indigo-700">
+                <button data-view="year" class="view-btn px-5 py-2 font-semibold rounded-md transition duration-150 ease-in-out utdt-blue-dark shadow-md hover:bg-indigo-900">
                     Ver por Año y Semestre
                 </button>
-                <button data-view="difficulty" class="view-btn px-4 py-2 font-semibold rounded-lg transition duration-150 ease-in-out bg-gray-200 text-gray-800 hover:bg-gray-300">
+                <button data-view="difficulty" class="view-btn px-5 py-2 font-semibold rounded-md transition duration-150 ease-in-out bg-gray-200 text-gray-800 hover:bg-gray-300">
                     Ver por Nivel de Dificultad
                 </button>
             </div>
 
             <!-- Filtro de Dificultad (Visible solo en la vista 'Por Dificultad') -->
             <div id="difficulty-filter" class="hidden flex flex-wrap gap-2 pt-2">
-                <button data-filter="TODAS" class="filter-btn px-4 py-2 text-sm font-semibold rounded-full border border-gray-400 bg-gray-800 text-white transition hover:bg-gray-600">
-                    Todas las Materias
+                <button data-filter="TODAS" class="filter-btn px-4 py-2 text-sm font-bold rounded-full border border-gray-400 bg-gray-800 text-white transition hover:bg-gray-600">
+                    Todas
                 </button>
-                <button data-filter="DIFÍCIL" class="filter-btn DIFÍCIL border border-red-700 transition hover:bg-red-700">
+                <button data-filter="DIFÍCIL" class="filter-btn px-4 py-2 text-sm font-bold rounded-full border border-red-700 transition hover:bg-red-100 DIFÍCIL">
                     DIFÍCIL
                 </button>
-                <button data-filter="MEDIO" class="filter-btn MEDIO border border-amber-600 transition hover:bg-amber-600">
+                <button data-filter="MEDIO" class="filter-btn px-4 py-2 text-sm font-bold rounded-full border border-amber-700 transition hover:bg-amber-100 MEDIO">
                     MEDIO
                 </button>
-                <button data-filter="FÁCIL" class="filter-btn FÁCIL border border-teal-600 transition hover:bg-teal-600">
+                <button data-filter="FÁCIL" class="filter-btn px-4 py-2 text-sm font-bold rounded-full border border-emerald-600 transition hover:bg-emerald-100 FÁCIL">
                     FÁCIL
                 </button>
             </div>
         </div>
 
         <!-- Contenedor Principal del Contenido -->
-        <div id="courses-container" class="mt-8">
+        <div id="courses-container" class="p-6 sm:p-8 pt-0">
             <!-- El contenido se inyectará aquí -->
         </div>
     </div>
 
     <script>
+        // Datos de las materias (manteniendo el mismo set de datos)
         const courses = [
             // 1.er Año
             { name: "Matemática I", year: 1, semester: 1, difficulty: "DIFÍCIL", description: "Es la base de las matemáticas avanzadas, a menudo implica cálculo y funciones complejas para quienes no tienen una base sólida." },
@@ -139,15 +149,15 @@
             const semesterText = course.semester === 1 ? 'Primer Semestre' : 'Segundo Semestre';
 
             return `
-                <div class="course-card p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm transition hover:shadow-lg mb-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
-                        <h3 class="text-xl font-bold text-gray-800">${course.name}</h3>
+                <div class="course-card p-4 bg-white border-b border-gray-200 transition hover:bg-gray-50 cursor-pointer">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h3 class="text-lg font-bold text-gray-800">${course.name}</h3>
                         <span class="difficulty-pill ${course.difficulty}">${course.difficulty}</span>
                     </div>
-                    <p class="text-sm text-gray-600 mb-3 font-semibold">
-                        ${yearText}, ${semesterText}
+                    <p class="text-xs text-gray-500 mb-2 font-medium">
+                        ${yearText} | ${semesterText}
                     </p>
-                    <p class="text-gray-700 text-sm italic">${course.description}</p>
+                    <p class="text-gray-700 text-sm italic mt-1">${course.description}</p>
                 </div>
             `;
         }
@@ -170,21 +180,21 @@
             for (let year = 1; year <= 4; year++) {
                 if (grouped[year]) {
                     html += `
-                        <section class="mb-10 p-4 border-b-4 border-indigo-600 rounded-lg bg-gray-100 shadow-md">
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-indigo-700 mb-6">
+                        <section class="mb-8 border-t-4 utdt-border">
+                            <h2 class="text-2xl sm:text-3xl font-extrabold utdt-blue-text bg-gray-50 p-4 shadow-sm">
                                 ${year}° Año
                             </h2>
                     `;
                     // Primer Semestre
                     if (grouped[year][1].length > 0) {
-                        html += `<h3 class="text-xl font-bold text-gray-700 mb-3 border-l-4 border-gray-500 pl-3">Primer Semestre</h3>`;
+                        html += `<h3 class="text-xl font-bold text-gray-800 bg-gray-100 p-3 border-l-4 border-amber-400">Primer Semestre</h3>`;
                         grouped[year][1].forEach(course => {
                             html += createCourseBlock(course);
                         });
                     }
                     // Segundo Semestre
                     if (grouped[year][2].length > 0) {
-                        html += `<h3 class="text-xl font-bold text-gray-700 mb-3 mt-6 border-l-4 border-gray-500 pl-3">Segundo Semestre</h3>`;
+                        html += `<h3 class="text-xl font-bold text-gray-800 bg-gray-100 p-3 border-l-4 border-amber-400 mt-4">Segundo Semestre</h3>`;
                         grouped[year][2].forEach(course => {
                             html += createCourseBlock(course);
                         });
@@ -220,11 +230,12 @@
             difficultiesToDisplay.forEach(difficulty => {
                 if (grouped[difficulty] && grouped[difficulty].length > 0) {
                     html += `
-                        <section class="mb-10 p-4 rounded-lg bg-white border-4 border-b-4 ${difficulty.toLowerCase() === 'difícil' ? 'border-red-600' : difficulty.toLowerCase() === 'medio' ? 'border-amber-400' : 'border-teal-500'} shadow-xl">
-                            <h2 class="text-3xl font-extrabold ${difficulty} p-2 rounded-lg inline-block shadow-md mb-6">
-                                DIFICULTAD: ${difficulty} (${grouped[difficulty].length} materias)
+                        <section class="mb-8 border-t-4 utdt-border">
+                            <h2 class="text-2xl font-extrabold text-white p-3 shadow-md ${difficulty} bg-gray-800">
+                                DIFICULTAD: ${difficulty}
+                                <span class="text-sm font-normal text-gray-300 ml-2">(${grouped[difficulty].length} materias)</span>
                             </h2>
-                            <div class="space-y-4">
+                            <div class="space-y-0 border border-gray-200">
                     `;
                     // Ordenar materias por Año y luego por Semestre
                     grouped[difficulty].sort((a, b) => {
@@ -236,9 +247,9 @@
                         const electivaTag = course.name.includes('(Electiva)') ? '<span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-medium ml-2">Electiva</span>' : '';
 
                         html += `
-                            <div class="p-4 bg-gray-50 border border-gray-300 rounded-xl shadow-sm transition hover:bg-gray-100">
-                                <h3 class="text-xl font-bold text-gray-800">${course.name} ${electivaTag}</h3>
-                                <p class="text-sm text-gray-600 font-medium mb-2">${yearSemester}</p>
+                            <div class="p-4 bg-white border-b border-gray-100 transition hover:bg-gray-50">
+                                <h3 class="text-lg font-bold text-gray-800">${course.name} ${electivaTag}</h3>
+                                <p class="text-sm text-gray-600 font-medium mb-1">${yearSemester}</p>
                                 <p class="text-gray-700 text-sm italic">${course.description}</p>
                             </div>
                         `;
@@ -264,9 +275,9 @@
             document.querySelectorAll('.view-btn').forEach(btn => {
                 if (btn.dataset.view === newView) {
                     btn.classList.remove('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
-                    btn.classList.add('bg-indigo-600', 'text-white', 'shadow-md', 'hover:bg-indigo-700');
+                    btn.classList.add('utdt-blue-dark', 'shadow-md', 'hover:bg-indigo-900');
                 } else {
-                    btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md', 'hover:bg-indigo-700');
+                    btn.classList.remove('utdt-blue-dark', 'shadow-md', 'hover:bg-indigo-900');
                     btn.classList.add('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
                 }
             });
@@ -296,21 +307,21 @@
         function updateFilterButtons() {
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 const filter = btn.dataset.filter;
-                btn.classList.remove('ring-4', 'ring-offset-2');
+                btn.classList.remove('ring-4', 'ring-offset-2', 'ring-offset-white');
                 if (filter === currentFilter) {
                     // Marcar el botón activo con un anillo
-                    btn.classList.add('ring-4', 'ring-offset-2');
+                    btn.classList.add('ring-4', 'ring-offset-2', 'ring-offset-white');
                     if (filter === 'TODAS') {
                         btn.classList.add('ring-gray-500');
                     } else if (filter === 'DIFÍCIL') {
-                         btn.classList.add('ring-red-300');
+                         btn.classList.add('ring-red-400');
                     } else if (filter === 'MEDIO') {
-                         btn.classList.add('ring-amber-300');
+                         btn.classList.add('ring-amber-400');
                     } else if (filter === 'FÁCIL') {
-                         btn.classList.add('ring-teal-300');
+                         btn.classList.add('ring-emerald-400');
                     }
                 } else {
-                    btn.classList.remove('ring-gray-500', 'ring-red-300', 'ring-amber-300', 'ring-teal-300');
+                    btn.classList.remove('ring-gray-500', 'ring-red-400', 'ring-amber-400', 'ring-emerald-400');
                 }
             });
         }
