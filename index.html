@@ -1,1 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificación de Materias - Economía Empresarial</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fuente Inter para mejor legibilidad */
+        body { font-family: 'Inter', sans-serif; }
+        /* Estilos personalizados para la dificultad */
+        .DIFÍCIL { background-color: #ef4444; color: white; } /* red-500 */
+        .MEDIO { background-color: #f59e0b; color: black; } /* amber-500 */
+        .FÁCIL { background-color: #10b981; color: white; } /* emerald-500 */
+        .difficulty-pill {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-6 sm:p-8">
+        <header class="mb-8 border-b pb-4">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-2">
+                Plan de Estudios: Economía Empresarial (4 Años)
+            </h1>
+            <p class="text-gray-500 text-lg">Clasificación de dificultad de las materias.</p>
+        </header>
+
+        <!-- Filtros y Opciones de Vista -->
+        <div class="mb-8 space-y-4">
+            <h2 class="text-xl font-bold text-gray-700">Filtros de Visualización</h2>
+
+            <!-- Selector de Vista (Por Año vs Por Dificultad) -->
+            <div id="view-selector" class="flex flex-col sm:flex-row gap-3">
+                <button data-view="year" class="view-btn px-4 py-2 font-semibold rounded-lg transition duration-150 ease-in-out bg-indigo-600 text-white shadow-md hover:bg-indigo-700">
+                    Ver por Año y Semestre
+                </button>
+                <button data-view="difficulty" class="view-btn px-4 py-2 font-semibold rounded-lg transition duration-150 ease-in-out bg-gray-200 text-gray-800 hover:bg-gray-300">
+                    Ver por Nivel de Dificultad
+                </button>
+            </div>
+
+            <!-- Filtro de Dificultad (Visible solo en la vista 'Por Dificultad') -->
+            <div id="difficulty-filter" class="hidden flex flex-wrap gap-2 pt-2">
+                <button data-filter="TODAS" class="filter-btn px-4 py-2 text-sm font-semibold rounded-full border border-gray-400 bg-gray-800 text-white transition hover:bg-gray-600">
+                    Todas las Materias
+                </button>
+                <button data-filter="DIFÍCIL" class="filter-btn DIFÍCIL border border-red-700 transition hover:bg-red-700">
+                    DIFÍCIL
+                </button>
+                <button data-filter="MEDIO" class="filter-btn MEDIO border border-amber-600 transition hover:bg-amber-600">
+                    MEDIO
+                </button>
+                <button data-filter="FÁCIL" class="filter-btn FÁCIL border border-teal-600 transition hover:bg-teal-600">
+                    FÁCIL
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenedor Principal del Contenido -->
+        <div id="courses-container" class="mt-8">
+            <!-- El contenido se inyectará aquí -->
+        </div>
+    </div>
+
+    <script>
+        const courses = [
+            // 1.er Año
+            { name: "Matemática I", year: 1, semester: 1, difficulty: "DIFÍCIL", description: "Es la base de las matemáticas avanzadas, a menudo implica cálculo y funciones complejas para quienes no tienen una base sólida." },
+            { name: "Economía I", year: 1, semester: 1, difficulty: "MEDIO", description: "Introducción a la microeconomía y/o la macroeconomía; conceptos nuevos pero fundamentales." },
+            { name: "Administración I", year: 1, semester: 1, difficulty: "FÁCIL", description: "Introduce principios de gestión y organización, generalmente es más conceptual." },
+            { name: "Introducción al Derecho", year: 1, semester: 1, difficulty: "MEDIO", description: "Requiere memorización y comprensión de conceptos legales abstractos." },
+
+            { name: "Matemática II", year: 1, semester: 2, difficulty: "DIFÍCIL", description: "Continuación de Matemática I, probablemente Álgebra Lineal, optimización o más Cálculo." },
+            { name: "Economía II", year: 1, semester: 2, difficulty: "MEDIO", description: "Continuación de Economía I, profundizando en Micro o Macro." },
+            { name: "Historia de Occidente a partir de la Modernidad", year: 1, semester: 2, difficulty: "FÁCIL", description: "Requiere lectura y análisis, pero suele ser menos exigente que las materias cuantitativas." },
+            { name: "Contabilidad Básica", year: 1, semester: 2, difficulty: "MEDIO", description: "Fundamental para la carrera. Requiere disciplina en el registro y lógica contable." },
+            { name: "Comprensión de Textos y Escritura", year: 1, semester: 2, difficulty: "FÁCIL", description: "Materia de apoyo, enfocada en habilidades básicas de comunicación." },
+
+            // 2.º Año
+            { name: "Introducción a la Estadística", year: 2, semester: 1, difficulty: "DIFÍCIL", description: "Introduce el razonamiento probabilístico y el uso de software, clave y rigurosa." },
+            { name: "Información y Contabilidad Gerencial I", year: 2, semester: 1, difficulty: "MEDIO", description: "Aplica la contabilidad a la toma de decisiones internas; más conceptual que la Contabilidad Básica." },
+            { name: "Microeconomía", year: 2, semester: 1, difficulty: "DIFÍCIL", description: "Se enfoca en la teoría del consumidor, la empresa y el equilibrio de mercado. Muy rigurosa y matemática." },
+            { name: "Economía Matemática", year: 2, semester: 1, difficulty: "DIFÍCIL", description: "Utiliza herramientas matemáticas (cálculo, optimización) para modelar problemas económicos." },
+
+            { name: "Análisis Estadístico", year: 2, semester: 2, difficulty: "DIFÍCIL", description: "Profundiza la estadística, incluyendo inferencia, regresión y modelado de datos." },
+            { name: "Historia Económica Internacional", year: 2, semester: 2, difficulty: "MEDIO", description: "Requiere una comprensión amplia de eventos y tendencias históricas." },
+            { name: "Instituciones Políticas y de Gobierno", year: 2, semester: 2, difficulty: "FÁCIL", description: "Es más teórica y descriptiva sobre sistemas políticos y su impacto económico." },
+            { name: "Información y Contabilidad Gerencial II", year: 2, semester: 2, difficulty: "MEDIO", description: "Continuación y aplicación de los conceptos gerenciales." },
+
+            // 3.er Año
+            { name: "Macroeconomía", year: 3, semester: 1, difficulty: "DIFÍCIL", description: "Estudio de agregados (PIB, inflación, desempleo), a menudo con modelos complejos (IS-LM, DA-OA)." },
+            { name: "Métodos Estadísticos Aplicados a los Negocios", year: 3, semester: 1, difficulty: "DIFÍCIL", description: "Uso práctico de modelos estadísticos y econométricos avanzados en contextos empresariales." },
+            { name: "Marketing", year: 3, semester: 1, difficulty: "MEDIO", description: "Conceptual y estratégico. Requiere creatividad y entendimiento del consumidor." },
+            { name: "Métodos Analíticos Aplicados a los Negocios", year: 3, semester: 1, difficulty: "DIFÍCIL", description: "Puede incluir Investigación Operativa, Optimización o Modelos de Simulación." },
+            { name: "Expresión Oral y Escrita", year: 3, semester: 1, difficulty: "FÁCIL", description: "Enfocada en la mejora de la comunicación profesional." },
+
+            { name: "Riesgo, Incertidumbre y Finanzas", year: 3, semester: 2, difficulty: "DIFÍCIL", description: "Introducción a la gestión del riesgo financiero, valoración y mercados. Muy cuantitativa." },
+            { name: "Teoría de las Decisiones", year: 3, semester: 2, difficulty: "MEDIO", description: "Analiza cómo se toman decisiones en ambientes complejos o inciertos (incluyendo juegos)." },
+            { name: "Dirección de Operaciones y Tecnología I", year: 3, semester: 2, difficulty: "MEDIO", description: "Gestión de procesos, eficiencia y calidad. Es un balance entre teoría y aplicación." },
+            // Electiva 3er año 2do semestre
+            { name: "Marketing Digital (Electiva)", year: 3, semester: 2, difficulty: "MEDIO", description: "Mayormente estratégico y práctico, requiere actualización constante. Alternativa a Métodos Analíticos y Programación." },
+            { name: "Métodos Analíticos y Programación (Electiva)", year: 3, semester: 2, difficulty: "DIFÍCIL", description: "Implica el aprendizaje de lenguajes de programación (e.g., Python, R) y su aplicación a problemas económicos. Alternativa a Marketing Digital." },
+
+            // 4.º Año
+            { name: "Finanzas Internacionales", year: 4, semester: 1, difficulty: "DIFÍCIL", description: "Mercados de divisas, riesgo cambiario, paridades y gestión financiera global." },
+            { name: "Finanzas de la Empresa", year: 4, semester: 1, difficulty: "DIFÍCIL", description: "Valoración de empresas, decisiones de inversión y financiación (CAPM, WACC, etc.)." },
+            // Electivas 4to año 1er semestre
+            { name: "Innovación (Electiva)", year: 4, semester: 1, difficulty: "FÁCIL", description: "Materia conceptual, enfocada en la creatividad y la gestión del cambio." },
+            { name: "Innovación y Emprendedurismo (Electiva)", year: 4, semester: 1, difficulty: "MEDIO", description: "Combina la teoría de la innovación con la ejecución de proyectos de negocio." },
+
+            { name: "Desarrollo de Nuevos Negocios", year: 4, semester: 2, difficulty: "MEDIO", description: "Enfoque en planes de negocio, startups y emprendimiento. Más conceptual y de proyecto." },
+            { name: "Estrategia Competitiva Digital", year: 4, semester: 2, difficulty: "MEDIO", description: "Análisis de mercado, posicionamiento y ventaja competitiva en el entorno digital." },
+            { name: "Dirección de Operaciones y Tecnología II", year: 4, semester: 2, difficulty: "MEDIO", description: "Continuación de la gestión de la cadena de suministro y la tecnología." },
+            // Electiva 4to año 2do semestre
+            { name: "Introducción a Blockchain (Electiva)", year: 4, semester: 2, difficulty: "MEDIO", description: "Introduce tecnología y criptomonedas. Los conceptos básicos son asequibles, pero la tecnología subyacente puede ser compleja." },
+
+        ];
+
+        const container = document.getElementById('courses-container');
+        const viewSelector = document.getElementById('view-selector');
+        const difficultyFilter = document.getElementById('difficulty-filter');
+        let currentView = 'year';
+        let currentFilter = 'TODAS';
+
+        /**
+         * Crea el bloque HTML para una materia.
+         * @param {object} course - Objeto de la materia.
+         * @returns {string} HTML del bloque de la materia.
+         */
+        function createCourseBlock(course) {
+            const yearText = course.name.includes('(Electiva)') ? `(Electiva) ${course.year}° Año` : `${course.year}° Año`;
+            const semesterText = course.semester === 1 ? 'Primer Semestre' : 'Segundo Semestre';
+
+            return `
+                <div class="course-card p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm transition hover:shadow-lg mb-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">${course.name}</h3>
+                        <span class="difficulty-pill ${course.difficulty}">${course.difficulty}</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3 font-semibold">
+                        ${yearText}, ${semesterText}
+                    </p>
+                    <p class="text-gray-700 text-sm italic">${course.description}</p>
+                </div>
+            `;
+        }
+
+        /**
+         * Renderiza la vista agrupada por Año y Semestre.
+         */
+        function renderByYearView() {
+            container.innerHTML = '';
+            difficultyFilter.classList.add('hidden');
+            const grouped = courses.reduce((acc, course) => {
+                const yearKey = course.year;
+                const semesterKey = `${course.year}-${course.semester}`;
+                if (!acc[yearKey]) acc[yearKey] = { 1: [], 2: [] };
+                acc[yearKey][course.semester].push(course);
+                return acc;
+            }, {});
+
+            let html = '';
+            for (let year = 1; year <= 4; year++) {
+                if (grouped[year]) {
+                    html += `
+                        <section class="mb-10 p-4 border-b-4 border-indigo-600 rounded-lg bg-gray-100 shadow-md">
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-indigo-700 mb-6">
+                                ${year}° Año
+                            </h2>
+                    `;
+                    // Primer Semestre
+                    if (grouped[year][1].length > 0) {
+                        html += `<h3 class="text-xl font-bold text-gray-700 mb-3 border-l-4 border-gray-500 pl-3">Primer Semestre</h3>`;
+                        grouped[year][1].forEach(course => {
+                            html += createCourseBlock(course);
+                        });
+                    }
+                    // Segundo Semestre
+                    if (grouped[year][2].length > 0) {
+                        html += `<h3 class="text-xl font-bold text-gray-700 mb-3 mt-6 border-l-4 border-gray-500 pl-3">Segundo Semestre</h3>`;
+                        grouped[year][2].forEach(course => {
+                            html += createCourseBlock(course);
+                        });
+                    }
+                    html += `</section>`;
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        /**
+         * Renderiza la vista agrupada por Nivel de Dificultad, aplicando el filtro actual.
+         */
+        function renderByDifficultyView() {
+            difficultyFilter.classList.remove('hidden');
+            container.innerHTML = '';
+
+            const difficultyOrder = ["DIFÍCIL", "MEDIO", "FÁCIL"];
+            const filteredCourses = currentFilter === 'TODAS'
+                ? courses
+                : courses.filter(c => c.difficulty === currentFilter);
+
+            const grouped = filteredCourses.reduce((acc, course) => {
+                const key = course.difficulty;
+                if (!acc[key]) acc[key] = [];
+                acc[key].push(course);
+                return acc;
+            }, {});
+
+            let html = '';
+            const difficultiesToDisplay = currentFilter === 'TODAS' ? difficultyOrder : [currentFilter];
+
+            difficultiesToDisplay.forEach(difficulty => {
+                if (grouped[difficulty] && grouped[difficulty].length > 0) {
+                    html += `
+                        <section class="mb-10 p-4 rounded-lg bg-white border-4 border-b-4 ${difficulty.toLowerCase() === 'difícil' ? 'border-red-600' : difficulty.toLowerCase() === 'medio' ? 'border-amber-400' : 'border-teal-500'} shadow-xl">
+                            <h2 class="text-3xl font-extrabold ${difficulty} p-2 rounded-lg inline-block shadow-md mb-6">
+                                DIFICULTAD: ${difficulty} (${grouped[difficulty].length} materias)
+                            </h2>
+                            <div class="space-y-4">
+                    `;
+                    // Ordenar materias por Año y luego por Semestre
+                    grouped[difficulty].sort((a, b) => {
+                        if (a.year !== b.year) return a.year - b.year;
+                        return a.semester - b.semester;
+                    }).forEach(course => {
+                        // Personalizar el bloque para esta vista
+                        const yearSemester = `${course.year}° Año, ${course.semester === 1 ? 'Primer' : 'Segundo'} Semestre`;
+                        const electivaTag = course.name.includes('(Electiva)') ? '<span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-medium ml-2">Electiva</span>' : '';
+
+                        html += `
+                            <div class="p-4 bg-gray-50 border border-gray-300 rounded-xl shadow-sm transition hover:bg-gray-100">
+                                <h3 class="text-xl font-bold text-gray-800">${course.name} ${electivaTag}</h3>
+                                <p class="text-sm text-gray-600 font-medium mb-2">${yearSemester}</p>
+                                <p class="text-gray-700 text-sm italic">${course.description}</p>
+                            </div>
+                        `;
+                    });
+
+                    html += `</div></section>`;
+                }
+            });
+
+            if (filteredCourses.length === 0) {
+                 html = `<div class="p-6 text-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">No hay materias en el rango de dificultad: <strong>${currentFilter}</strong>.</div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        /**
+         * Manejador de eventos para cambiar la vista.
+         */
+        function handleViewChange(newView) {
+            currentView = newView;
+            // Actualizar botones de vista
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                if (btn.dataset.view === newView) {
+                    btn.classList.remove('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
+                    btn.classList.add('bg-indigo-600', 'text-white', 'shadow-md', 'hover:bg-indigo-700');
+                } else {
+                    btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md', 'hover:bg-indigo-700');
+                    btn.classList.add('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
+                }
+            });
+
+            if (currentView === 'year') {
+                renderByYearView();
+            } else {
+                // Resetear filtro al cambiar a la vista de dificultad
+                currentFilter = 'TODAS';
+                updateFilterButtons();
+                renderByDifficultyView();
+            }
+        }
+
+        /**
+         * Manejador de eventos para cambiar el filtro de dificultad.
+         */
+        function handleFilterChange(newFilter) {
+            currentFilter = newFilter;
+            updateFilterButtons();
+            renderByDifficultyView();
+        }
+
+        /**
+         * Actualiza el estilo del botón de filtro activo.
+         */
+        function updateFilterButtons() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const filter = btn.dataset.filter;
+                btn.classList.remove('ring-4', 'ring-offset-2');
+                if (filter === currentFilter) {
+                    // Marcar el botón activo con un anillo
+                    btn.classList.add('ring-4', 'ring-offset-2');
+                    if (filter === 'TODAS') {
+                        btn.classList.add('ring-gray-500');
+                    } else if (filter === 'DIFÍCIL') {
+                         btn.classList.add('ring-red-300');
+                    } else if (filter === 'MEDIO') {
+                         btn.classList.add('ring-amber-300');
+                    } else if (filter === 'FÁCIL') {
+                         btn.classList.add('ring-teal-300');
+                    }
+                } else {
+                    btn.classList.remove('ring-gray-500', 'ring-red-300', 'ring-amber-300', 'ring-teal-300');
+                }
+            });
+        }
+
+        // Inicialización y Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar la vista por defecto (Por Año)
+            handleViewChange('year');
+
+            // Listeners para cambiar la vista (Por Año / Por Dificultad)
+            viewSelector.querySelectorAll('.view-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    handleViewChange(button.dataset.view);
+                });
+            });
+
+            // Listeners para cambiar el filtro de dificultad
+            difficultyFilter.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    handleFilterChange(button.dataset.filter);
+                });
+            });
+            updateFilterButtons(); // Asegurar que el botón "TODAS" se muestre activo al inicio de la vista de dificultad
+        });
+    </script>
+</body>
+</html>
 
