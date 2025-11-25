@@ -3,350 +3,460 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clasificación de Materias - Economía Empresarial UTDT</title>
+    <title>UTDT Economics - Student Hub</title>
     <!-- Carga de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuente 'Outfit' de Google Fonts para ese look moderno y juvenil del logo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        'dt-pink': '#ec4899', /* Pink-500 aprox */
+                        'dt-teal': '#2dd4bf', /* Teal-400 aprox */
+                        'dt-yellow': '#fbbf24', /* Amber-400 aprox */
+                        'dt-dark': '#1f2937',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* Fuente Inter para mejor legibilidad */
-        body { font-family: 'Inter', sans-serif; }
-        /* Paleta UTDT Inferred: Azul Oscuro/Índigo como color institucional */
-        .utdt-blue-dark { background-color: #312e81; color: white; } /* Indigo-800 */
-        .utdt-blue-text { color: #312e81; } /* Indigo-800 */
-        .utdt-border { border-color: #312e81; } /* Indigo-800 */
+        body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        /* Animación suave para el acordeón */
+        .details-content {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .details-content.open {
+            max-height: 500px; /* Altura máxima arbitraria para permitir la expansión */
+            opacity: 1;
+            margin-top: 1rem;
+        }
 
-        /* Estilos de pastillas de Dificultad (Ajustados para más sobriedad) */
-        .DIFÍCIL { background-color: #fca5a5; color: #b91c1c; } /* Red-300 / Red-700 */
-        .MEDIO { background-color: #fcd34d; color: #b45309; } /* Amber-300 / Amber-800 */
-        .FÁCIL { background-color: #a7f3d0; color: #065f46; } /* Emerald-300 / Emerald-800 */
+        /* Estilos específicos de dificultad */
+        .pill-DIFÍCIL { background-color: #fecdd3; color: #be123c; border: 2px solid #be123c; }
+        .pill-MEDIO { background-color: #fde68a; color: #b45309; border: 2px solid #b45309; }
+        .pill-FÁCIL { background-color: #a7f3d0; color: #047857; border: 2px solid #047857; }
 
-        .difficulty-pill {
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px; /* Menos redondeado para un look más formal */
-            font-weight: 700;
-            font-size: 0.875rem;
-            display: inline-block;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        .card-shadow-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 8px 8px 0px 0px rgba(236, 72, 153, 0.2); /* Sombra dura estilo pop */
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4 sm:p-10">
+<body class="text-gray-800 min-h-screen p-4 sm:p-8">
 
-    <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-lg overflow-hidden">
-        <header class="p-6 sm:p-8 border-b-4 utdt-border bg-white">
-            <h1 class="text-3xl sm:text-4xl font-extrabold utdt-blue-text mb-2">
-                Plan de Estudios: Economía Empresarial
-            </h1>
-            <p class="text-gray-600 text-lg border-l-4 border-amber-400 pl-3">
-                Clasificación de dificultad de las materias.
+    <div class="max-w-5xl mx-auto">
+        <!-- Header Estilo Pop -->
+        <header class="mb-10 text-center relative">
+            <div class="inline-block relative z-10">
+                <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight mb-2">
+                    <span class="text-dt-yellow drop-shadow-sm">di</span><span class="text-dt-teal drop-shadow-sm">te</span><span class="text-dt-pink drop-shadow-sm">lla</span>
+                    <span class="text-gray-800 text-3xl sm:text-5xl block sm:inline mt-2 sm:mt-0">Economics</span>
+                </h1>
+                <div class="h-4 w-full bg-dt-yellow/30 absolute bottom-2 -z-10 rounded-full transform -rotate-1"></div>
+            </div>
+            <p class="text-xl font-medium text-gray-500 mt-4 max-w-2xl mx-auto">
+                Tu mapa de ruta para conquistar Economía Empresarial con estilo.
             </p>
         </header>
 
-        <!-- Controles de Filtro y Visualización -->
-        <div class="p-6 sm:p-8 space-y-6">
-            <h2 class="text-xl font-bold text-gray-700 uppercase tracking-wider">Visualización y Filtros</h2>
-
-            <!-- Selector de Vista (Por Año vs Por Dificultad) -->
-            <div id="view-selector" class="flex flex-col sm:flex-row gap-3">
-                <button data-view="year" class="view-btn px-5 py-2 font-semibold rounded-md transition duration-150 ease-in-out utdt-blue-dark shadow-md hover:bg-indigo-900">
-                    Ver por Año y Semestre
+        <!-- Controles de Filtro -->
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10">
+            <!-- Selector de Vista -->
+            <div class="bg-white p-1.5 rounded-full shadow-lg border border-gray-100 flex">
+                <button onclick="changeView('year')" id="btn-year" class="px-6 py-2 rounded-full font-bold transition-all bg-dt-pink text-white shadow-md">
+                    Por Año
                 </button>
-                <button data-view="difficulty" class="view-btn px-5 py-2 font-semibold rounded-md transition duration-150 ease-in-out bg-gray-200 text-gray-800 hover:bg-gray-300">
-                    Ver por Nivel de Dificultad
+                <button onclick="changeView('difficulty')" id="btn-diff" class="px-6 py-2 rounded-full font-bold transition-all text-gray-500 hover:text-dt-teal">
+                    Por Dificultad
                 </button>
             </div>
 
-            <!-- Filtro de Dificultad (Visible solo en la vista 'Por Dificultad') -->
-            <div id="difficulty-filter" class="hidden flex flex-wrap gap-2 pt-2">
-                <button data-filter="TODAS" class="filter-btn px-4 py-2 text-sm font-bold rounded-full border border-gray-400 bg-gray-800 text-white transition hover:bg-gray-600">
-                    Todas
-                </button>
-                <button data-filter="DIFÍCIL" class="filter-btn px-4 py-2 text-sm font-bold rounded-full border border-red-700 transition hover:bg-red-100 DIFÍCIL">
-                    DIFÍCIL
-                </button>
-                <button data-filter="MEDIO" class="filter-btn px-4 py-2 text-sm font-bold rounded-full border border-amber-700 transition hover:bg-amber-100 MEDIO">
-                    MEDIO
-                </button>
-                <button data-filter="FÁCIL" class="filter-btn px-4 py-2 text-sm font-bold rounded-full border border-emerald-600 transition hover:bg-emerald-100 FÁCIL">
-                    FÁCIL
-                </button>
+            <!-- Filtros de Dificultad (Ocultos por defecto) -->
+            <div id="difficulty-filters" class="hidden flex gap-2">
+                <button onclick="filterDifficulty('TODAS')" class="px-4 py-2 rounded-full font-bold bg-gray-800 text-white border-2 border-gray-800 text-sm">Todas</button>
+                <button onclick="filterDifficulty('DIFÍCIL')" class="px-4 py-2 rounded-full font-bold bg-white text-red-600 border-2 border-red-200 hover:border-red-600 text-sm">Difícil</button>
+                <button onclick="filterDifficulty('MEDIO')" class="px-4 py-2 rounded-full font-bold bg-white text-amber-600 border-2 border-amber-200 hover:border-amber-600 text-sm">Medio</button>
+                <button onclick="filterDifficulty('FÁCIL')" class="px-4 py-2 rounded-full font-bold bg-white text-emerald-600 border-2 border-emerald-200 hover:border-emerald-600 text-sm">Fácil</button>
             </div>
         </div>
 
-        <!-- Contenedor Principal del Contenido -->
-        <div id="courses-container" class="p-6 sm:p-8 pt-0">
-            <!-- El contenido se inyectará aquí -->
+        <!-- Contenedor de Cursos -->
+        <div id="courses-container" class="space-y-8">
+            <!-- Se llena con JS -->
         </div>
     </div>
 
     <script>
-        // Datos de las materias (manteniendo el mismo set de datos)
+        // --- DATA DE MATERIAS (Contenido Enriquecido) ---
         const courses = [
-            // 1.er Año
-            { name: "Matemática I", year: 1, semester: 1, difficulty: "DIFÍCIL", description: "Es la base de las matemáticas avanzadas, a menudo implica cálculo y funciones complejas para quienes no tienen una base sólida." },
-            { name: "Economía I", year: 1, semester: 1, difficulty: "MEDIO", description: "Introducción a la microeconomía y/o la macroeconomía; conceptos nuevos pero fundamentales." },
-            { name: "Administración I", year: 1, semester: 1, difficulty: "FÁCIL", description: "Introduce principios de gestión y organización, generalmente es más conceptual." },
-            { name: "Introducción al Derecho", year: 1, semester: 1, difficulty: "MEDIO", description: "Requiere memorización y comprensión de conceptos legales abstractos." },
+            // 1er Año - Semestre 1
+            { 
+                id: 1, name: "Matemática I", year: 1, semester: 1, difficulty: "DIFÍCIL", score: 9, symbol: "📐", 
+                quote: "El libro de la naturaleza está escrito en el lenguaje de las matemáticas.", author: "Galileo Galilei",
+                desc: "Análisis matemático fundamental.",
+                longDesc: "Dominarás funciones, límites, derivadas e integrales. Es la caja de herramientas esencial para modelar cualquier fenómeno económico futuro. Si fallas aquí, fallas en Microeconomía."
+            },
+            { 
+                id: 2, name: "Economía I", year: 1, semester: 1, difficulty: "MEDIO", score: 6, symbol: "🪙", 
+                quote: "El primer principio de la economía es que los deseos son ilimitados y los recursos escasos.", author: "Thomas Sowell",
+                desc: "Introducción a la escasez y la elección.",
+                longDesc: "Aprenderás a pensar como economista. Costo de oportunidad, frontera de posibilidades de producción y las leyes básicas de oferta y demanda que rigen el mundo."
+            },
+            { 
+                id: 3, name: "Administración I", year: 1, semester: 1, difficulty: "FÁCIL", score: 3, symbol: "🏢", 
+                quote: "La gestión es hacer las cosas bien; el liderazgo es hacer las cosas correctas.", author: "Peter Drucker",
+                desc: "Estructura y procesos organizacionales.",
+                longDesc: "Un viaje por la teoría de las organizaciones. Entenderás cómo se estructuran las empresas, la planificación estratégica y los roles gerenciales básicos."
+            },
+            { 
+                id: 4, name: "Introducción al Derecho", year: 1, semester: 1, difficulty: "MEDIO", score: 4, symbol: "⚖️", 
+                quote: "Donde termina la ley, comienza la tiranía.", author: "John Locke",
+                desc: "Marco legal para los negocios.",
+                longDesc: "El entorno empresarial no existe en el vacío. Estudiarás las bases del derecho civil y comercial, contratos y obligaciones esenciales para cualquier ejecutivo."
+            },
 
-            { name: "Matemática II", year: 1, semester: 2, difficulty: "DIFÍCIL", description: "Continuación de Matemática I, probablemente Álgebra Lineal, optimización o más Cálculo." },
-            { name: "Economía II", year: 1, semester: 2, difficulty: "MEDIO", description: "Continuación de Economía I, profundizando en Micro o Macro." },
-            { name: "Historia de Occidente a partir de la Modernidad", year: 1, semester: 2, difficulty: "FÁCIL", description: "Requiere lectura y análisis, pero suele ser menos exigente que las materias cuantitativas." },
-            { name: "Contabilidad Básica", year: 1, semester: 2, difficulty: "MEDIO", description: "Fundamental para la carrera. Requiere disciplina en el registro y lógica contable." },
-            { name: "Comprensión de Textos y Escritura", year: 1, semester: 2, difficulty: "FÁCIL", description: "Materia de apoyo, enfocada en habilidades básicas de comunicación." },
+            // 1er Año - Semestre 2
+            { 
+                id: 5, name: "Matemática II", year: 1, semester: 2, difficulty: "DIFÍCIL", score: 8, symbol: "➗", 
+                quote: "No te preocupes por tus dificultades en matemáticas. Te aseguro que las mías son mayores.", author: "Albert Einstein",
+                desc: "Álgebra lineal y multivariable.",
+                longDesc: "Aquí la cosa se pone tridimensional. Matrices, vectores y optimización de funciones de varias variables. Clave para entender datos masivos."
+            },
+            { 
+                id: 6, name: "Economía II", year: 1, semester: 2, difficulty: "MEDIO", score: 6, symbol: "💵", 
+                quote: "A largo plazo es una guía engañosa para la actualidad. A largo plazo, todos estaremos muertos.", author: "John M. Keynes",
+                desc: "Macroeconomía introductoria.",
+                longDesc: "Entenderás el PIB, la inflación, el desempleo y el dinero. ¿Por qué suben los precios? ¿Cómo afectan las tasas de interés? Aquí encontrarás respuestas."
+            },
+            { 
+                id: 7, name: "Historia de Occidente", year: 1, semester: 2, difficulty: "FÁCIL", score: 2, symbol: "📜", 
+                quote: "Aquellos que no recuerdan el pasado están condenados a repetirlo.", author: "George Santayana",
+                desc: "Contexto histórico de la modernidad.",
+                longDesc: "Análisis de los procesos políticos, sociales y económicos desde la Edad Moderna hasta el presente. Contexto vital para entender el capitalismo actual."
+            },
+            { 
+                id: 8, name: "Contabilidad Básica", year: 1, semester: 2, difficulty: "MEDIO", score: 5, symbol: "🧾", 
+                quote: "La contabilidad es el lenguaje de los negocios.", author: "Warren Buffett",
+                desc: "Registro y estados financieros.",
+                longDesc: "Aprenderás a leer un Balance General y un Estado de Resultados. Sin esto, no puedes saber si una empresa gana dinero o se está desangrando."
+            },
+            { 
+                id: 9, name: "Escritura y Oratoria", year: 1, semester: 2, difficulty: "FÁCIL", score: 1, symbol: "✍️", 
+                quote: "Si no puedes explicarlo de forma sencilla, es que no lo has entendido bien.", author: "Richard Feynman",
+                desc: "Comunicación efectiva.",
+                longDesc: "Técnicas de argumentación, redacción académica y presentaciones orales. La habilidad blanda más dura de dominar."
+            },
 
-            // 2.º Año
-            { name: "Introducción a la Estadística", year: 2, semester: 1, difficulty: "DIFÍCIL", description: "Introduce el razonamiento probabilístico y el uso de software, clave y rigurosa." },
-            { name: "Información y Contabilidad Gerencial I", year: 2, semester: 1, difficulty: "MEDIO", description: "Aplica la contabilidad a la toma de decisiones internas; más conceptual que la Contabilidad Básica." },
-            { name: "Microeconomía", year: 2, semester: 1, difficulty: "DIFÍCIL", description: "Se enfoca en la teoría del consumidor, la empresa y el equilibrio de mercado. Muy rigurosa y matemática." },
-            { name: "Economía Matemática", year: 2, semester: 1, difficulty: "DIFÍCIL", description: "Utiliza herramientas matemáticas (cálculo, optimización) para modelar problemas económicos." },
+            // 2do Año - Semestre 1
+            { 
+                id: 10, name: "Intro. a la Estadística", year: 2, semester: 1, difficulty: "DIFÍCIL", score: 8, symbol: "📊", 
+                quote: "En Dios confiamos. Todos los demás deben traer datos.", author: "W. Edwards Deming",
+                desc: "Probabilidad y análisis descriptivo.",
+                longDesc: "El arte de recolectar y entender datos. Distribuciones de probabilidad, variables aleatorias y la base para tomar decisiones bajo incertidumbre."
+            },
+            { 
+                id: 11, name: "Info. y Cont. Gerencial I", year: 2, semester: 1, difficulty: "MEDIO", score: 6, symbol: "💼", 
+                quote: "Lo que no se puede medir, no se puede gestionar.", author: "Peter Drucker",
+                desc: "Costos y toma de decisiones internas.",
+                longDesc: "Diferencia entre contabilidad financiera y de gestión. Análisis de costos, punto de equilibrio y presupuestos para dirigir una empresa."
+            },
+            { 
+                id: 12, name: "Microeconomía", year: 2, semester: 1, difficulty: "DIFÍCIL", score: 10, symbol: "📈", 
+                quote: "El vicio es un desperdicio de vida.", author: "Gary Becker (Nobel)",
+                desc: "Teoría del consumidor y la firma.",
+                longDesc: "El filtro de la carrera. Modelos matemáticos rigurosos sobre cómo los individuos maximizan utilidad y las empresas maximizan beneficios."
+            },
+            { 
+                id: 13, name: "Economía Matemática", year: 2, semester: 1, difficulty: "DIFÍCIL", score: 9, symbol: "🧠", 
+                quote: "Las matemáticas poseen no solo la verdad, sino la belleza suprema.", author: "Bertrand Russell",
+                desc: "Modelado avanzado.",
+                longDesc: "Aplicación intensiva de cálculo y álgebra para resolver problemas económicos teóricos complejos. Pura abstracción lógica."
+            },
 
-            { name: "Análisis Estadístico", year: 2, semester: 2, difficulty: "DIFÍCIL", description: "Profundiza la estadística, incluyendo inferencia, regresión y modelado de datos." },
-            { name: "Historia Económica Internacional", year: 2, semester: 2, difficulty: "MEDIO", description: "Requiere una comprensión amplia de eventos y tendencias históricas." },
-            { name: "Instituciones Políticas y de Gobierno", year: 2, semester: 2, difficulty: "FÁCIL", description: "Es más teórica y descriptiva sobre sistemas políticos y su impacto económico." },
-            { name: "Información y Contabilidad Gerencial II", year: 2, semester: 2, difficulty: "MEDIO", description: "Continuación y aplicación de los conceptos gerenciales." },
+            // 2do Año - Semestre 2
+            { 
+                id: 14, name: "Análisis Estadístico", year: 2, semester: 2, difficulty: "DIFÍCIL", score: 9, symbol: "📉", 
+                quote: "La tortura de los números hará que confiesen cualquier cosa.", author: "Gregg Easterbrook",
+                desc: "Inferencia y test de hipótesis.",
+                longDesc: "Ir más allá de los datos observados. Aprenderás a hacer predicciones y a validar si tus resultados son suerte o ciencia."
+            },
+            { 
+                id: 15, name: "Historia Econ. Internacional", year: 2, semester: 2, difficulty: "MEDIO", score: 4, symbol: "🌍", 
+                quote: "La historia económica es la historia de cómo la humanidad ha superado la escasez.", author: "Douglass North",
+                desc: "Evolución de la economía global.",
+                longDesc: "Desde la Revolución Industrial hasta la globalización. Análisis de por qué algunas naciones son ricas y otras pobres."
+            },
+            { 
+                id: 16, name: "Instituciones Políticas", year: 2, semester: 2, difficulty: "FÁCIL", score: 3, symbol: "🏛️", 
+                quote: "El hombre es por naturaleza un animal político.", author: "Aristóteles",
+                desc: "Sistemas de gobierno y poder.",
+                longDesc: "Cómo funcionan las democracias, los parlamentos y los sistemas electorales, y cómo esto impacta en el clima de negocios."
+            },
+            { 
+                id: 17, name: "Info. y Cont. Gerencial II", year: 2, semester: 2, difficulty: "MEDIO", score: 5, symbol: "⚙️", 
+                quote: "El control es la fuerza que mantiene unida a la organización.", author: "Henry Fayol",
+                desc: "Control de gestión avanzado.",
+                longDesc: "Tableros de control, KPIs, y sistemas de incentivos. Cómo alinear los objetivos de los empleados con los de los dueños."
+            },
 
-            // 3.er Año
-            { name: "Macroeconomía", year: 3, semester: 1, difficulty: "DIFÍCIL", description: "Estudio de agregados (PIB, inflación, desempleo), a menudo con modelos complejos (IS-LM, DA-OA)." },
-            { name: "Métodos Estadísticos Aplicados a los Negocios", year: 3, semester: 1, difficulty: "DIFÍCIL", description: "Uso práctico de modelos estadísticos y econométricos avanzados en contextos empresariales." },
-            { name: "Marketing", year: 3, semester: 1, difficulty: "MEDIO", description: "Conceptual y estratégico. Requiere creatividad y entendimiento del consumidor." },
-            { name: "Métodos Analíticos Aplicados a los Negocios", year: 3, semester: 1, difficulty: "DIFÍCIL", description: "Puede incluir Investigación Operativa, Optimización o Modelos de Simulación." },
-            { name: "Expresión Oral y Escrita", year: 3, semester: 1, difficulty: "FÁCIL", description: "Enfocada en la mejora de la comunicación profesional." },
+            // 3er Año - Semestre 1
+            { 
+                id: 18, name: "Macroeconomía", year: 3, semester: 1, difficulty: "DIFÍCIL", score: 9, symbol: "🏦", 
+                quote: "La inflación es siempre y en todas partes un fenómeno monetario.", author: "Milton Friedman",
+                desc: "Modelos dinámicos y crecimiento.",
+                longDesc: "Modelos IS-LM avanzados, curvas de Phillips y teoría del crecimiento de Solow. Entenderás las crisis económicas profundas."
+            },
+            { 
+                id: 19, name: "Marketing", year: 3, semester: 1, difficulty: "MEDIO", score: 6, symbol: "🎯", 
+                quote: "El marketing no se trata de las cosas que vendes, sino de las historias que cuentas.", author: "Seth Godin",
+                desc: "Estrategia de mercado y consumidor.",
+                longDesc: "Segmentación, targeting y posicionamiento. Las 4P ya quedaron atrás; aquí verás cómo crear valor real para el cliente."
+            },
+            { 
+                id: 20, name: "Métodos Analíticos (Negocios)", year: 3, semester: 1, difficulty: "DIFÍCIL", score: 8, symbol: "♟️", 
+                quote: "Un juego es una serie de decisiones interesantes.", author: "Sid Meier",
+                desc: "Teoría de Juegos y Optimización.",
+                longDesc: "Cómo tomar decisiones estratégicas cuando el resultado depende de lo que haga tu competencia. Equilibrio de Nash aplicado."
+            },
 
-            { name: "Riesgo, Incertidumbre y Finanzas", year: 3, semester: 2, difficulty: "DIFÍCIL", description: "Introducción a la gestión del riesgo financiero, valoración y mercados. Muy cuantitativa." },
-            { name: "Teoría de las Decisiones", year: 3, semester: 2, difficulty: "MEDIO", description: "Analiza cómo se toman decisiones en ambientes complejos o inciertos (incluyendo juegos)." },
-            { name: "Dirección de Operaciones y Tecnología I", year: 3, semester: 2, difficulty: "MEDIO", description: "Gestión de procesos, eficiencia y calidad. Es un balance entre teoría y aplicación." },
-            // Electiva 3er año 2do semestre
-            { name: "Marketing Digital (Electiva)", year: 3, semester: 2, difficulty: "MEDIO", description: "Mayormente estratégico y práctico, requiere actualización constante. Alternativa a Métodos Analíticos y Programación." },
-            { name: "Métodos Analíticos y Programación (Electiva)", year: 3, semester: 2, difficulty: "DIFÍCIL", description: "Implica el aprendizaje de lenguajes de programación (e.g., Python, R) y su aplicación a problemas económicos. Alternativa a Marketing Digital." },
+            // 3er Año - Semestre 2
+            { 
+                id: 21, name: "Riesgo y Finanzas", year: 3, semester: 2, difficulty: "DIFÍCIL", score: 10, symbol: "⚠️", 
+                quote: "El riesgo proviene de no saber lo que estás haciendo.", author: "Warren Buffett",
+                desc: "Mercados de capitales y valoración.",
+                longDesc: "Introducción al mundo financiero. Valor tiempo del dinero, bonos, acciones y la relación fundamental entre riesgo y retorno."
+            },
+            { 
+                id: 22, name: "Teoría de las Decisiones", year: 3, semester: 2, difficulty: "MEDIO", score: 7, symbol: "🎲", 
+                quote: "Nada es más difícil, y por lo tanto más precioso, que ser capaz de decidir.", author: "Napoleón Bonaparte",
+                desc: "Psicología y racionalidad.",
+                longDesc: "Sesgos cognitivos, heurísticas y por qué los humanos somos irracionales. Análisis de árboles de decisión y utilidad esperada."
+            },
+            { 
+                id: 23, name: "Dirección de Operaciones I", year: 3, semester: 2, difficulty: "MEDIO", score: 5, symbol: "🛠️", 
+                quote: "No puedes mejorar lo que no controlas.", author: "Kaoru Ishikawa",
+                desc: "Procesos y eficiencia.",
+                longDesc: "Gestión de la cadena de suministro, cuellos de botella y metodologías Lean. Cómo hacer más con menos recursos."
+            },
 
-            // 4.º Año
-            { name: "Finanzas Internacionales", year: 4, semester: 1, difficulty: "DIFÍCIL", description: "Mercados de divisas, riesgo cambiario, paridades y gestión financiera global." },
-            { name: "Finanzas de la Empresa", year: 4, semester: 1, difficulty: "DIFÍCIL", description: "Valoración de empresas, decisiones de inversión y financiación (CAPM, WACC, etc.)." },
-            // Electivas 4to año 1er semestre
-            { name: "Innovación (Electiva)", year: 4, semester: 1, difficulty: "FÁCIL", description: "Materia conceptual, enfocada en la creatividad y la gestión del cambio." },
-            { name: "Innovación y Emprendedurismo (Electiva)", year: 4, semester: 1, difficulty: "MEDIO", description: "Combina la teoría de la innovación con la ejecución de proyectos de negocio." },
+            // 4to Año - Semestre 1
+            { 
+                id: 24, name: "Finanzas Internacionales", year: 4, semester: 1, difficulty: "DIFÍCIL", score: 9, symbol: "🌐", 
+                quote: "El dinero no tiene patria; los financieros carecen de patriotismo.", author: "Napoleón Bonaparte",
+                desc: "Tipos de cambio y mercados globales.",
+                longDesc: "Arbitraje de monedas, paridad de tasas de interés y gestión del riesgo cambiario en corporaciones multinacionales."
+            },
+            { 
+                id: 25, name: "Finanzas de la Empresa", year: 4, semester: 1, difficulty: "DIFÍCIL", score: 10, symbol: "💰", 
+                quote: "El precio es lo que pagas. El valor es lo que obtienes.", author: "Warren Buffett",
+                desc: "Valuación corporativa (Corporate Finance).",
+                longDesc: "Descuento de flujos de fondos (DCF), estructura de capital óptima y fusiones y adquisiciones. La materia reina para futuros CFOs."
+            },
+            { 
+                id: 26, name: "Innovación y Emprendedurismo", year: 4, semester: 1, difficulty: "MEDIO", score: 5, symbol: "🚀", 
+                quote: "La mejor manera de predecir el futuro es crearlo.", author: "Peter Drucker",
+                desc: "De la idea a la ejecución.",
+                longDesc: "Metodologías Lean Startup, Design Thinking y cómo levantar capital para tu propia startup. Creación de modelo de negocios Canvas."
+            },
 
-            { name: "Desarrollo de Nuevos Negocios", year: 4, semester: 2, difficulty: "MEDIO", description: "Enfoque en planes de negocio, startups y emprendimiento. Más conceptual y de proyecto." },
-            { name: "Estrategia Competitiva Digital", year: 4, semester: 2, difficulty: "MEDIO", description: "Análisis de mercado, posicionamiento y ventaja competitiva en el entorno digital." },
-            { name: "Dirección de Operaciones y Tecnología II", year: 4, semester: 2, difficulty: "MEDIO", description: "Continuación de la gestión de la cadena de suministro y la tecnología." },
-            // Electiva 4to año 2do semestre
-            { name: "Introducción a Blockchain (Electiva)", year: 4, semester: 2, difficulty: "MEDIO", description: "Introduce tecnología y criptomonedas. Los conceptos básicos son asequibles, pero la tecnología subyacente puede ser compleja." },
-
+             // 4to Año - Semestre 2
+             { 
+                id: 27, name: "Estrategia Competitiva Digital", year: 4, semester: 2, difficulty: "MEDIO", score: 6, symbol: "🔗", 
+                quote: "El software se está comiendo el mundo.", author: "Marc Andreessen",
+                desc: "Plataformas y efectos de red.",
+                longDesc: "Cómo compiten Uber, Airbnb y Google. Economías de plataforma, lock-in y competencia en mercados de dos lados."
+            }
         ];
 
+        // --- LÓGICA DE INTERFAZ ---
+
         const container = document.getElementById('courses-container');
-        const viewSelector = document.getElementById('view-selector');
-        const difficultyFilter = document.getElementById('difficulty-filter');
+        const btnYear = document.getElementById('btn-year');
+        const btnDiff = document.getElementById('btn-diff');
+        const filtersDiv = document.getElementById('difficulty-filters');
+        
         let currentView = 'year';
         let currentFilter = 'TODAS';
 
-        /**
-         * Crea el bloque HTML para una materia.
-         * @param {object} course - Objeto de la materia.
-         * @returns {string} HTML del bloque de la materia.
-         */
-        function createCourseBlock(course) {
-            const yearText = course.name.includes('(Electiva)') ? `(Electiva) ${course.year}° Año` : `${course.year}° Año`;
-            const semesterText = course.semester === 1 ? 'Primer Semestre' : 'Segundo Semestre';
+        function renderCourseCard(c) {
+            // Estilos dinámicos basados en el logo
+            // Usamos bordes coloridos para dar esa vibra juvenil
+            let borderClass = 'border-l-4 border-gray-200';
+            if (c.year === 1) borderClass = 'border-l-8 border-dt-pink';
+            if (c.year === 2) borderClass = 'border-l-8 border-dt-teal';
+            if (c.year === 3) borderClass = 'border-l-8 border-dt-yellow';
+            if (c.year === 4) borderClass = 'border-l-8 border-purple-500';
 
             return `
-                <div class="course-card p-4 bg-white border-b border-gray-200 transition hover:bg-gray-50 cursor-pointer">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                        <h3 class="text-lg font-bold text-gray-800">${course.name}</h3>
-                        <span class="difficulty-pill ${course.difficulty}">${course.difficulty}</span>
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 card-shadow-hover transition-all duration-300 relative overflow-hidden group">
+                <!-- Header de la tarjeta -->
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="text-4xl p-3 bg-gray-50 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                            ${c.symbol}
+                        </div>
+                        <div>
+                            <h3 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight group-hover:text-dt-pink transition-colors">
+                                ${c.name}
+                            </h3>
+                            <span class="text-xs font-bold uppercase tracking-wide text-gray-400">
+                                ${c.year}° Año | Semestre ${c.semester}
+                            </span>
+                        </div>
                     </div>
-                    <p class="text-xs text-gray-500 mb-2 font-medium">
-                        ${yearText} | ${semesterText}
-                    </p>
-                    <p class="text-gray-700 text-sm italic mt-1">${course.description}</p>
+                    <div class="flex flex-col items-end gap-2">
+                        <span class="text-xs font-bold px-3 py-1 rounded-full pill-${c.difficulty}">
+                            ${c.difficulty}
+                        </span>
+                        <div class="flex items-center bg-gray-100 rounded-lg px-2 py-1">
+                            <span class="text-sm font-bold text-gray-600">Score:</span>
+                            <span class="ml-1 text-lg font-black text-dt-dark">${c.score}</span>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Cita Inspiradora -->
+                <div class="mb-4 relative pl-4">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-dt-pink to-dt-yellow rounded-full"></div>
+                    <p class="text-lg font-medium text-gray-700 italic">"${c.quote}"</p>
+                    <p class="text-xs font-bold text-dt-teal mt-1">— ${c.author}</p>
+                </div>
+
+                <!-- Descripción breve -->
+                <p class="text-gray-500 text-sm mb-4">${c.desc}</p>
+
+                <!-- Botón Desplegable -->
+                <button onclick="toggleDetails(${c.id})" class="w-full py-2 rounded-xl bg-gray-50 hover:bg-dt-teal hover:text-white font-bold text-sm text-gray-500 transition-colors flex items-center justify-center gap-2 group-btn">
+                    <span>Ver temario completo</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="icon-${c.id}">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <!-- Contenido Oculto -->
+                <div id="details-${c.id}" class="details-content bg-gray-50 rounded-xl mt-0 px-4">
+                    <div class="py-4 text-sm text-gray-600 leading-relaxed">
+                        <h4 class="font-bold text-dt-dark mb-1">De qué trata realmente:</h4>
+                        ${c.longDesc}
+                    </div>
+                </div>
+            </div>
             `;
         }
 
-        /**
-         * Renderiza la vista agrupada por Año y Semestre.
-         */
-        function renderByYearView() {
-            container.innerHTML = '';
-            difficultyFilter.classList.add('hidden');
-            const grouped = courses.reduce((acc, course) => {
-                const yearKey = course.year;
-                const semesterKey = `${course.year}-${course.semester}`;
-                if (!acc[yearKey]) acc[yearKey] = { 1: [], 2: [] };
-                acc[yearKey][course.semester].push(course);
-                return acc;
-            }, {});
-
-            let html = '';
-            for (let year = 1; year <= 4; year++) {
-                if (grouped[year]) {
-                    html += `
-                        <section class="mb-8 border-t-4 utdt-border">
-                            <h2 class="text-2xl sm:text-3xl font-extrabold utdt-blue-text bg-gray-50 p-4 shadow-sm">
-                                ${year}° Año
-                            </h2>
-                    `;
-                    // Primer Semestre
-                    if (grouped[year][1].length > 0) {
-                        html += `<h3 class="text-xl font-bold text-gray-800 bg-gray-100 p-3 border-l-4 border-amber-400">Primer Semestre</h3>`;
-                        grouped[year][1].forEach(course => {
-                            html += createCourseBlock(course);
-                        });
-                    }
-                    // Segundo Semestre
-                    if (grouped[year][2].length > 0) {
-                        html += `<h3 class="text-xl font-bold text-gray-800 bg-gray-100 p-3 border-l-4 border-amber-400 mt-4">Segundo Semestre</h3>`;
-                        grouped[year][2].forEach(course => {
-                            html += createCourseBlock(course);
-                        });
-                    }
-                    html += `</section>`;
-                }
+        function toggleDetails(id) {
+            const content = document.getElementById(`details-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.classList.remove('rotate-180');
+            } else {
+                content.classList.add('open');
+                icon.classList.add('rotate-180');
             }
-            container.innerHTML = html;
         }
 
-        /**
-         * Renderiza la vista agrupada por Nivel de Dificultad, aplicando el filtro actual.
-         */
-        function renderByDifficultyView() {
-            difficultyFilter.classList.remove('hidden');
+        function renderByYear() {
             container.innerHTML = '';
+            // Agrupar por año
+            for (let i = 1; i <= 4; i++) {
+                const yearCourses = courses.filter(c => c.year === i);
+                if (yearCourses.length === 0) continue;
 
-            const difficultyOrder = ["DIFÍCIL", "MEDIO", "FÁCIL"];
-            const filteredCourses = currentFilter === 'TODAS'
-                ? courses
+                const section = document.createElement('div');
+                section.className = 'mb-12';
+                
+                // Título del Año con estilo
+                const titleColor = i === 1 ? 'text-dt-pink' : (i === 2 ? 'text-dt-teal' : (i === 3 ? 'text-dt-yellow' : 'text-purple-500'));
+                
+                section.innerHTML = `
+                    <div class="flex items-center gap-4 mb-6">
+                        <h2 class="text-4xl font-black ${titleColor}">${i}° AÑO</h2>
+                        <div class="h-1 flex-grow bg-gray-200 rounded-full"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        ${yearCourses.map(c => renderCourseCard(c)).join('')}
+                    </div>
+                `;
+                container.appendChild(section);
+            }
+        }
+
+        function renderByDifficulty() {
+            container.innerHTML = '';
+            
+            const filtered = currentFilter === 'TODAS' 
+                ? courses 
                 : courses.filter(c => c.difficulty === currentFilter);
 
-            const grouped = filteredCourses.reduce((acc, course) => {
-                const key = course.difficulty;
-                if (!acc[key]) acc[key] = [];
-                acc[key].push(course);
-                return acc;
-            }, {});
-
-            let html = '';
-            const difficultiesToDisplay = currentFilter === 'TODAS' ? difficultyOrder : [currentFilter];
-
-            difficultiesToDisplay.forEach(difficulty => {
-                if (grouped[difficulty] && grouped[difficulty].length > 0) {
-                    html += `
-                        <section class="mb-8 border-t-4 utdt-border">
-                            <h2 class="text-2xl font-extrabold text-white p-3 shadow-md ${difficulty} bg-gray-800">
-                                DIFICULTAD: ${difficulty}
-                                <span class="text-sm font-normal text-gray-300 ml-2">(${grouped[difficulty].length} materias)</span>
-                            </h2>
-                            <div class="space-y-0 border border-gray-200">
-                    `;
-                    // Ordenar materias por Año y luego por Semestre
-                    grouped[difficulty].sort((a, b) => {
-                        if (a.year !== b.year) return a.year - b.year;
-                        return a.semester - b.semester;
-                    }).forEach(course => {
-                        // Personalizar el bloque para esta vista
-                        const yearSemester = `${course.year}° Año, ${course.semester === 1 ? 'Primer' : 'Segundo'} Semestre`;
-                        const electivaTag = course.name.includes('(Electiva)') ? '<span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-medium ml-2">Electiva</span>' : '';
-
-                        html += `
-                            <div class="p-4 bg-white border-b border-gray-100 transition hover:bg-gray-50">
-                                <h3 class="text-lg font-bold text-gray-800">${course.name} ${electivaTag}</h3>
-                                <p class="text-sm text-gray-600 font-medium mb-1">${yearSemester}</p>
-                                <p class="text-gray-700 text-sm italic">${course.description}</p>
-                            </div>
-                        `;
-                    });
-
-                    html += `</div></section>`;
-                }
-            });
-
-            if (filteredCourses.length === 0) {
-                 html = `<div class="p-6 text-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">No hay materias en el rango de dificultad: <strong>${currentFilter}</strong>.</div>`;
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="text-center p-10 text-gray-400 font-bold">No hay materias para este filtro.</div>`;
+                return;
             }
 
-            container.innerHTML = html;
+            // Grid simple para dificultad
+            const grid = document.createElement('div');
+            grid.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
+            grid.innerHTML = filtered.map(c => renderCourseCard(c)).join('');
+            container.appendChild(grid);
         }
 
-        /**
-         * Manejador de eventos para cambiar la vista.
-         */
-        function handleViewChange(newView) {
-            currentView = newView;
-            // Actualizar botones de vista
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                if (btn.dataset.view === newView) {
-                    btn.classList.remove('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
-                    btn.classList.add('utdt-blue-dark', 'shadow-md', 'hover:bg-indigo-900');
-                } else {
-                    btn.classList.remove('utdt-blue-dark', 'shadow-md', 'hover:bg-indigo-900');
-                    btn.classList.add('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
-                }
-            });
-
-            if (currentView === 'year') {
-                renderByYearView();
+        function changeView(view) {
+            currentView = view;
+            
+            // Toggle Botones principales
+            if (view === 'year') {
+                btnYear.className = "px-6 py-2 rounded-full font-bold transition-all bg-dt-pink text-white shadow-md";
+                btnDiff.className = "px-6 py-2 rounded-full font-bold transition-all text-gray-500 hover:text-dt-teal";
+                filtersDiv.classList.add('hidden');
+                renderByYear();
             } else {
-                // Resetear filtro al cambiar a la vista de dificultad
-                currentFilter = 'TODAS';
-                updateFilterButtons();
-                renderByDifficultyView();
+                btnYear.className = "px-6 py-2 rounded-full font-bold transition-all text-gray-500 hover:text-dt-pink";
+                btnDiff.className = "px-6 py-2 rounded-full font-bold transition-all bg-dt-teal text-white shadow-md";
+                filtersDiv.classList.remove('hidden');
+                renderByDifficulty();
             }
         }
 
-        /**
-         * Manejador de eventos para cambiar el filtro de dificultad.
-         */
-        function handleFilterChange(newFilter) {
-            currentFilter = newFilter;
-            updateFilterButtons();
-            renderByDifficultyView();
-        }
-
-        /**
-         * Actualiza el estilo del botón de filtro activo.
-         */
-        function updateFilterButtons() {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                const filter = btn.dataset.filter;
-                btn.classList.remove('ring-4', 'ring-offset-2', 'ring-offset-white');
-                if (filter === currentFilter) {
-                    // Marcar el botón activo con un anillo
-                    btn.classList.add('ring-4', 'ring-offset-2', 'ring-offset-white');
-                    if (filter === 'TODAS') {
-                        btn.classList.add('ring-gray-500');
-                    } else if (filter === 'DIFÍCIL') {
-                         btn.classList.add('ring-red-400');
-                    } else if (filter === 'MEDIO') {
-                         btn.classList.add('ring-amber-400');
-                    } else if (filter === 'FÁCIL') {
-                         btn.classList.add('ring-emerald-400');
-                    }
+        function filterDifficulty(diff) {
+            currentFilter = diff;
+            renderByDifficulty();
+            
+            // Actualizar estado visual de los botones de filtro
+            const buttons = filtersDiv.querySelectorAll('button');
+            buttons.forEach(btn => {
+                if (btn.textContent.toUpperCase() === diff || (diff === 'TODAS' && btn.textContent === 'Todas')) {
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-gray-400');
+                    btn.style.transform = "scale(1.05)";
                 } else {
-                    btn.classList.remove('ring-gray-500', 'ring-red-400', 'ring-amber-400', 'ring-emerald-400');
+                    btn.classList.remove('ring-2', 'ring-offset-2', 'ring-gray-400');
+                    btn.style.transform = "scale(1)";
                 }
             });
         }
 
-        // Inicialización y Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar la vista por defecto (Por Año)
-            handleViewChange('year');
+        // Init
+        renderByYear();
 
-            // Listeners para cambiar la vista (Por Año / Por Dificultad)
-            viewSelector.querySelectorAll('.view-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    handleViewChange(button.dataset.view);
-                });
-            });
-
-            // Listeners para cambiar el filtro de dificultad
-            difficultyFilter.querySelectorAll('.filter-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    handleFilterChange(button.dataset.filter);
-                });
-            });
-            updateFilterButtons(); // Asegurar que el botón "TODAS" se muestre activo al inicio de la vista de dificultad
-        });
     </script>
 </body>
 </html>
-
